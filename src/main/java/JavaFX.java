@@ -1,5 +1,7 @@
 import javafx.application.Application;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 
 import javafx.scene.layout.VBox;
@@ -32,8 +34,8 @@ public class JavaFX extends Application {
 	VBox headerAndInfoBox, navigationBarBox, weatherInformationBox, advertisementBox, windAndDirectionBox, precipAndHumidBox, moodBox;
 	HBox root, infoAndAdsBox, headerBox, locationSearch,  infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBox;
 	Scene sceneHome, scene3Day, sceneWeek;
-	Image weatherImage,searchImage;
-	ImageView weatherIcon, searchIcon;
+	Image weatherImage,searchImage, homeImage;
+	ImageView weatherIcon, searchIcon, homeIcon;
 
 
 	public static void main(String[] args) {
@@ -50,6 +52,9 @@ public class JavaFX extends Application {
 
 		// Navigation buttons on navigation bar
 		buttonHome = new Button("Home");
+		homeImage = new Image(getClass().getResource("/icons/Home.png").toExternalForm());
+		homeIcon = new ImageView(homeImage);
+
 		button3Day = new Button("3Day");
 		buttonWeek = new Button("Week");
 
@@ -133,6 +138,8 @@ public class JavaFX extends Application {
 
 		// inside scene create to half one for navigation bar and other half of page
 		navigationBarBox = new VBox(10, buttonHome, button3Day, buttonWeek);
+		navigationBarBox.setAlignment(Pos.TOP_CENTER);
+		navigationBarBox.setPadding((new Insets(20, 0, 0, 0)));
 		navigationBarBox.setStyle ("-fx-background-color: #6EA2EF;");
 		navigationBarBox.setPrefWidth(70);
 
