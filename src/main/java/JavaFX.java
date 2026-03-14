@@ -19,23 +19,24 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.Hyperlink;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-import java.awt.BorderLayout;
+import java.awt.*;
 
 public class JavaFX extends Application {
 	//
  	// INITIALIZING
  	//
-	Label title;
+	Label title, advertisement, adDetails;
 	Button buttonHome, button3Day, buttonWeek, buttonSearch, buttonTemperature;
-	TextField locationInput, todayWeatherText, date, temperature, dayText, dayTemp, nightText, nightTemp, moodOfDay, mood, pictureOfMood, wind, direction, precipitation, humidity, advertisement, adDetails, adImage;
+	TextField locationInput, todayWeatherText, date, temperature, dayText, dayTemp, nightText, nightTemp, moodOfDay, mood, pictureOfMood, wind, direction, precipitation, humidity;
 	VBox headerAndInfoBox, navigationBarBox, weatherInformationBox, advertisementBox, windAndDirectionBox, precipAndHumidBox, moodBox;
 	HBox root, infoAndAdsBox, headerBox, locationSearch,  infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBox;
 	Scene sceneHome, scene3Day, sceneWeek;
-	Image weatherImage,searchImage, homeImage;
-	ImageView weatherIcon, searchIcon, homeIcon;
+	Image weatherImage,searchImage, homeImage, threeDayImage, weekImage, adImage;
+	ImageView weatherIcon, searchIcon, homeIcon, threeDayIcon, weekIcon,adImageView;
 
 
 	public static void main(String[] args) {
@@ -51,12 +52,30 @@ public class JavaFX extends Application {
 		primaryStage.setTitle("Choi's Yeather App");
 
 		// Navigation buttons on navigation bar
-		buttonHome = new Button("Home");
+		// Home button
 		homeImage = new Image(getClass().getResource("/icons/Home.png").toExternalForm());
 		homeIcon = new ImageView(homeImage);
-
-		button3Day = new Button("3Day");
-		buttonWeek = new Button("Week");
+		homeIcon.setFitWidth(40);
+		homeIcon.setFitHeight(40);
+		homeIcon.setPreserveRatio(true);
+		buttonHome = new Button();
+		buttonHome.setGraphic(homeIcon);
+		// 3-Day button
+		threeDayImage = new Image(getClass().getResource("icons/3-Day.png").toExternalForm());
+		threeDayIcon = new ImageView(threeDayImage);
+		threeDayIcon.setFitWidth(40);
+		threeDayIcon.setFitHeight(40);
+		threeDayIcon.setPreserveRatio(true);
+		button3Day = new Button();
+		button3Day.setGraphic(threeDayIcon);
+		// Week button
+		weekImage = new Image(getClass().getResource("icons/Week.png").toExternalForm());
+		weekIcon = new ImageView((weekImage));
+		weekIcon.setFitWidth(40);
+		weekIcon.setFitHeight(40);
+		weekIcon.setPreserveRatio(true);
+		buttonWeek = new Button();
+		buttonWeek.setGraphic(weekIcon);
 
 		//
 		// Header Box Details
@@ -75,9 +94,13 @@ public class JavaFX extends Application {
 
 
 		// Advertisement Box details
-		advertisement = new TextField("Advertisement");
-		adDetails = new TextField("Ad details");
-		adImage = new TextField("Ad image");
+		advertisement = new Label("Advertisement");
+		adDetails = new Label("Looking for a local dental assistant? Look no farther!");
+		//adDetails.setMinimumSize(new Dimension(100, 50));
+		adImage = new Image(getClass().getResource("/linkedIn/Anna's_LinkedIn.jpg").toExternalForm());
+		adImageView = new ImageView(adImage);
+		adImageView.setFitHeight(100);
+		adImageView.setFitWidth(100);
 
 		// info section detail
 		weatherImage = new Image(getClass().getResource("/icons/Weather.png").toExternalForm());
@@ -120,12 +143,13 @@ public class JavaFX extends Application {
 		infoSecondSection = new HBox(10, dayText, dayTemp, nightText, nightTemp);
 		infoThirdSection = new HBox(10, windAndDirectionBox, precipAndHumidBox, moodBox);
 
-		adSplitBox = new HBox(10, adDetails, adImage);
+		adSplitBox = new HBox(10, adDetails, adImageView);
+		adSplitBox.setAlignment(Pos.CENTER);
 
 		weatherInformationBox = new VBox(10, infoSection, infoFirstSection, infoSecondSection, infoThirdSection);
 		// ad box
 		advertisementBox = new VBox(10, advertisement, adSplitBox);
-		advertisementBox.setStyle ("-fx-background-color: green;");
+		advertisementBox.setStyle ("-fx-background-color: #FFD1DF;");
 
 		// set up info and ads box
 		infoAndAdsBox = new HBox(10, weatherInformationBox, advertisementBox);
@@ -139,9 +163,9 @@ public class JavaFX extends Application {
 		// inside scene create to half one for navigation bar and other half of page
 		navigationBarBox = new VBox(10, buttonHome, button3Day, buttonWeek);
 		navigationBarBox.setAlignment(Pos.TOP_CENTER);
-		navigationBarBox.setPadding((new Insets(20, 0, 0, 0)));
+		navigationBarBox.setPadding((new Insets(10, 0, 0, 0)));
 		navigationBarBox.setStyle ("-fx-background-color: #6EA2EF;");
-		navigationBarBox.setPrefWidth(70);
+		navigationBarBox.setPrefWidth(100);
 
 		headerAndInfoBox = new VBox(10, headerBox, infoAndAdsBox);
 		headerAndInfoBox.setStyle ("-fx-background-color: white;");
