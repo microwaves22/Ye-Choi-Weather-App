@@ -53,10 +53,11 @@ public class JavaFX extends Application {
 		button3Day = new Button("3Day");
 		buttonWeek = new Button("Week");
 
-		// Header Box details
+		//
+		// Header Box Details
+ 		//
 		title = new Label("Choi's Yeather App");
-		title.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-//		title.setEditable(false);
+		title.getStyleClass().add("title");
 
 		locationInput = new TextField("Choose Location");
 		searchImage = new Image(getClass().getResource("/icons/Search.png").toExternalForm());
@@ -141,7 +142,7 @@ public class JavaFX extends Application {
 		// set up overall Scene
 		root = new HBox(navigationBarBox, headerAndInfoBox);
 		sceneHome = new Scene(root, 700, 700);
-//		sceneHome.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		sceneHome.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 
 		primaryStage.setScene(sceneHome);
 		primaryStage.show();
