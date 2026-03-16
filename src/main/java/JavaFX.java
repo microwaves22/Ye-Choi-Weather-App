@@ -1,5 +1,6 @@
 import javafx.application.Application;
 
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,25 +20,27 @@ import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
 
+import javafx.event.EventHandler;
+
 public class JavaFX extends Application {
 	//
 	// INITIALIZING
 	//
-	Label title, advertisement, adDetails, todayWeatherText;
-	Button buttonHome, button3Day, buttonWeek, buttonSearch, buttonTemperature;
+	Hyperlink linkAnna, linkMichelle;
+	Label title, advertisement, advertisementAnna, advertisementMichelle, adDetailsAnna, adDetailsMichelle, todayWeatherText;
+	Button buttonHome, buttonWeek, buttonSearch, buttonTemperature;
 	TextField locationInput, date, temperature, dayText, dayTemp, nightText, nightTemp, moodOfDay, mood, pictureOfMood, wind, direction, precipitation, humidity;
-	VBox headerAndInfoBox, navigationBarBox, weatherInformationBox, advertisementBox, windAndDirectionBox, precipAndHumidBox, moodBox;
+	VBox headerAndInfoBox, navigationBarBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, windAndDirectionBox, precipAndHumidBox, moodBox;
 
-	VBox weekBox, weekDay1Info, weekDay2Info, weekDay3Info, weekDay4Info, weekDay5Info, weekDay6Info, weekDay7Info, weekDay8Info, weekDay9Info, weekDay10Info;
-	HBox weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7, weekRow8, weekRow9, weekRow10;
-	TextField weekDay1, weekDay2, weekDay3, weekDay4, weekDay5, weekDay6, weekDay7, weekDay8, weekDay9, weekDay10;
+	VBox weekBox, weekDay1Info, weekDay2Info, weekDay3Info, weekDay4Info, weekDay5Info, weekDay6Info, weekDay7Info;
+	HBox weekRoot, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7;
+	TextField weekDay1, weekDay2, weekDay3, weekDay4, weekDay5, weekDay6, weekDay7;
 
-	HBox root, infoAndAdsBox, headerBox, locationSearch,  infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBox;
-	Scene sceneHome, scene3Day, sceneWeek;
-	Image weatherImage,searchImage, homeImage, threeDayImage, weekImage, adImage;
-	ImageView weatherIcon, searchIcon, homeIcon, threeDayIcon, weekIcon,adImageView;
-
-	HBox weekContent, weekRoot;
+	HBox root, infoAndAdsBox, headerBox, locationSearch,  infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBoxAnna, adSplitBoxMichelle;
+	Scene sceneHome, sceneWeek;
+	Image weatherImage,searchImage, homeImage, weekImage, adImage, adImageMichelle, adImageAnna;
+	ImageView weatherIcon, searchIcon, homeIcon, weekIcon, adImageViewAnna, adImageViewMichelle;
+	HBox weekContent;
 	VBox weekHeaderAndInfoBox;
 
 	public static void main(String[] args) {
@@ -51,47 +54,18 @@ public class JavaFX extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Choi's Yeather App");
 
-		initializeWeekCode();
-		initializeNavigation();
-		initializeHeader();
-		initializeAds();
-		initializeWeatherInfo();
+		navigation();
+		header();
+		ads();
+		weatherInfo();
+		weekCode();
 		setupLayouts(primaryStage);
 
 		primaryStage.setScene(sceneHome);
 		primaryStage.show();
 	}
 
-	private void initializeWeekCode() {
-		// WEEK CODE
-		weekDay1 = new TextField ("Day 1");
-		weekDay2 = new TextField ("Day 2");
-		weekDay3 = new TextField ("Day 3");
-		weekDay4 = new TextField ("Day 4");
-		weekDay5 = new TextField ("Day 5");
-		weekDay6 = new TextField ("Day 6");
-		weekDay7 = new TextField ("Day 7");
-		weekDay8 = new TextField("Day 8");
-		weekDay9 = new TextField ("Day 9");
-		weekDay10 = new TextField ("Day 10");
-
-		// temperature
-		weekRow1 = new HBox(10, weekDay1, new TextField("Temperature"));
-		weekRow2 = new HBox(10, weekDay2, new TextField("Temperature"));
-		weekRow3 = new HBox(10, weekDay3, new TextField("Temperature"));
-		weekRow4 = new HBox(10, weekDay4, new TextField("Temperature"));
-		weekRow5 = new HBox(10, weekDay5, new TextField("Temperature"));
-		weekRow6 = new HBox(10, weekDay6, new TextField("Temperature"));
-		weekRow7 = new HBox(10, weekDay7, new TextField("Temperature"));
-		weekRow8 = new HBox(10, weekDay8, new TextField("Temperature"));
-		weekRow9 = new HBox(10, weekDay9, new TextField("Temperature"));
-		weekRow10 = new HBox(10, weekDay10, new TextField("Temperature"));
-
-		// weekBox
-		weekBox = new VBox(10, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7, weekRow8, weekRow9, weekRow10);
-	}
-
-	private void initializeNavigation() {
+	private void navigation() {
 		// Navigation buttons on navigation bar
 		// Home button
 		homeImage = new Image(getClass().getResource("/icons/Home.png").toExternalForm());
@@ -101,28 +75,24 @@ public class JavaFX extends Application {
 		homeIcon.setPreserveRatio(true);
 		buttonHome = new Button();
 		buttonHome.setGraphic(homeIcon);
-		// 3-Day button
-		threeDayImage = new Image(getClass().getResource("icons/3-Day.png").toExternalForm());
-		threeDayIcon = new ImageView(threeDayImage);
-		threeDayIcon.setFitWidth(40);
-		threeDayIcon.setFitHeight(40);
-		threeDayIcon.setPreserveRatio(true);
-		button3Day = new Button();
-		button3Day.setGraphic(threeDayIcon);
+
 		// Week button
-		weekImage = new Image(getClass().getResource("icons/Week.png").toExternalForm());
+		weekImage = new Image(getClass().getResource("/icons/Week.png").toExternalForm());
 		weekIcon = new ImageView((weekImage));
 		weekIcon.setFitWidth(40);
 		weekIcon.setFitHeight(40);
 		weekIcon.setPreserveRatio(true);
 		buttonWeek = new Button();
 		buttonWeek.setGraphic(weekIcon);
+
+		// inside scene create to half one for navigation bar and other half of page
+		navigationBarBox = new VBox(10, buttonHome, buttonWeek);
+		navigationBarBox.getStyleClass().add("navigationBarBox");
+		navigationBarBox.setStyle("-fx-background-color: #6EA2EF;");
 	}
 
-	private void initializeHeader() {
-		//
+	private void header() {
 		// Header Box Details
-		//
 		title = new Label("Choi's Yeather App");
 		title.getStyleClass().add("title");
 
@@ -132,22 +102,43 @@ public class JavaFX extends Application {
 		searchIcon.setFitWidth(16);
 		searchIcon.setFitHeight(16);
 		searchIcon.setPreserveRatio(true);
+
 		buttonSearch = new Button();
 		buttonSearch.setGraphic(searchIcon);
 	}
 
-	private void initializeAds() {
+	private void ads() {
 		// Advertisement Box details
-		advertisement = new Label("Advertisement");
-		adDetails = new Label("Looking for a local dental assistant? Look no farther!");
-		//adDetails.setMinimumSize(new Dimension(100, 50));
-		adImage = new Image(getClass().getResource("/linkedIn/Anna's_LinkedIn.jpg").toExternalForm());
-		adImageView = new ImageView(adImage);
-		adImageView.setFitHeight(100);
-		adImageView.setFitWidth(100);
+		advertisementAnna = new Label("Advertisement");
+		adDetailsAnna = new Label("Looking for a local dental assistant? Look no farther!");
+		adImageAnna = new Image(getClass().getResource("/linkedIn/Anna's_LinkedIn.jpg").toExternalForm());
+		adImageViewAnna = new ImageView(adImageAnna);
+		adImageViewAnna.setFitHeight(100);
+		adImageViewAnna.setFitWidth(100);
+		linkAnna = new Hyperlink("Visit Anna's LinkedIn");
+		linkAnna.setOnAction(new EventHandler() {
+			@Override
+			public void handle(Event event) {
+				getHostServices().showDocument("www.linkedin.com/in/annachoi817");
+			}
+		});
+
+		advertisementMichelle = new Label("Advertisement");
+		adDetailsMichelle = new Label("Michelle Ye");
+		adImageMichelle = new Image(getClass().getResource("/linkedIn/Michelle's_LinkedIn.jpg").toExternalForm());
+		adImageViewMichelle = new ImageView(adImageMichelle);
+		adImageViewMichelle.setFitHeight(100);
+		adImageViewMichelle.setFitWidth(100);
+		linkMichelle = new Hyperlink("Visit Michelle's LinkedIn");
+		linkMichelle.setOnAction(new EventHandler() {
+			@Override
+			public void handle(Event event) {
+				getHostServices().showDocument("https://www.linkedin.com/in/michelle-ye-700911299/");
+			}
+		});
 	}
 
-	private void initializeWeatherInfo() {
+	private void weatherInfo() {
 		// info section detail
 		weatherImage = new Image(getClass().getResource("/icons/Weather.png").toExternalForm());
 		weatherIcon = new ImageView(weatherImage);
@@ -184,25 +175,57 @@ public class JavaFX extends Application {
 		moodBox = new VBox(10, moodOfDay, mood, pictureOfMood);
 
 		// sections
-		infoSection = new HBox(10, weatherIcon, todayWeatherText, buttonTemperature );
+		infoSection = new HBox(10, todayWeatherText, buttonTemperature );
 		infoFirstSection = new HBox(10, weatherIcon, temperature, date);
 		infoSecondSection = new HBox(10, dayText, dayTemp, nightText, nightTemp);
 		infoThirdSection = new HBox(10, windAndDirectionBox, precipAndHumidBox, moodBox);
 	}
 
+	private void weekCode() {
+		// WEEK CODE
+		weekDay1 = new TextField ("Day 1");
+		weekDay2 = new TextField ("Day 2");
+		weekDay3 = new TextField ("Day 3");
+		weekDay4 = new TextField ("Day 4");
+		weekDay5 = new TextField ("Day 5");
+		weekDay6 = new TextField ("Day 6");
+		weekDay7 = new TextField ("Day 7");
+
+		// temperature
+		weekRow1 = new HBox(10, weekDay1, new TextField("Temperature"));
+		weekRow2 = new HBox(10, weekDay2, new TextField("Temperature"));
+		weekRow3 = new HBox(10, weekDay3, new TextField("Temperature"));
+		weekRow4 = new HBox(10, weekDay4, new TextField("Temperature"));
+		weekRow5 = new HBox(10, weekDay5, new TextField("Temperature"));
+		weekRow6 = new HBox(10, weekDay6, new TextField("Temperature"));
+		weekRow7 = new HBox(10, weekDay7, new TextField("Temperature"));
+
+		// weekBox
+		weekBox = new VBox(10, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7);
+	}
+
 	private void setupLayouts(Stage primaryStage) {
-		adSplitBox = new HBox(10, adDetails, adImageView);
-		adSplitBox.setAlignment(Pos.CENTER);
+		// ad box
+		adSplitBoxAnna = new HBox(10, adDetailsAnna, adImageViewAnna);
+		adSplitBoxAnna.setAlignment(Pos.CENTER);
+		advertisementBoxAnna = new VBox(10, advertisementAnna, adSplitBoxAnna, linkAnna);
+		advertisementBoxAnna.getStyleClass().add("advertisementBox");
+//     advertisementBox.setStyle ("-fx-background-color: #FFD1DF;");
+		// set up info and ads box
+
+//		adSplitBox = new HBox(10, adDetails, adImageView);
+//		adSplitBox.setAlignment(Pos.CENTER);
 
 		weatherInformationBox = new VBox(10, infoSection, infoFirstSection, infoSecondSection, infoThirdSection);
 		weatherInformationBox.getStyleClass().add("weatherInformationBox");
 		// ad box
-		advertisementBox = new VBox(10, advertisement, adSplitBox);
-		advertisementBox.getStyleClass().add("advertisementBox");
+		advertisementBoxAnna = new VBox(10, advertisementAnna, adSplitBoxAnna, linkAnna);
+		advertisementBoxAnna.getStyleClass().add("advertisementBox");
 //     advertisementBox.setStyle ("-fx-background-color: #FFD1DF;");
+		infoAndAdsBox = new HBox(10, weatherInformationBox, advertisementBoxAnna);
 
 		// set up info and ads box
-		infoAndAdsBox = new HBox(10, weatherInformationBox, advertisementBox);
+		infoAndAdsBox = new HBox(10, weatherInformationBox, advertisementBoxAnna);
 //     infoAndAdsBox.getStyleClass().add("infoAndAdsBox");
 //     infoAndAdsBox.setStyle ("-fx-background-color: grey;");
 
@@ -212,19 +235,17 @@ public class JavaFX extends Application {
 		headerBox = new HBox(10, title, locationSearch);
 		headerBox.getStyleClass().add("headerBox");
 
-		// inside scene create to half one for navigation bar and other half of page
-		navigationBarBox = new VBox(10, buttonHome, button3Day, buttonWeek);
-		navigationBarBox.setAlignment(Pos.TOP_CENTER);
-		navigationBarBox.setPadding((new Insets(10, 0, 0, 0)));
-		navigationBarBox.setStyle ("-fx-background-color: #6EA2EF;");
-		navigationBarBox.setPrefWidth(100);
-
 		headerAndInfoBox = new VBox(10, headerBox, infoAndAdsBox);
 		headerAndInfoBox.setStyle ("-fx-background-color: white;");
 
 		// week content
-		weekContent = new HBox(10, weekBox, advertisementBox);
-		weekHeaderAndInfoBox = new VBox(10, headerAndInfoBox, weekContent);
+		adSplitBoxMichelle = new HBox(10, adDetailsMichelle, adImageViewMichelle);
+		adSplitBoxMichelle.setAlignment(Pos.CENTER);
+		advertisementBoxMichelle = new VBox(10, advertisementMichelle, adSplitBoxMichelle, linkMichelle);
+		advertisementBoxMichelle.getStyleClass().add("advertisementBox");
+		weekContent = new HBox(10, weekBox, advertisementBoxMichelle);
+
+		weekHeaderAndInfoBox = new VBox(10,headerAndInfoBox, weekContent);
 		weekRoot = new HBox(navigationBarBox, weekHeaderAndInfoBox);
 
 		sceneWeek = new Scene(weekRoot, 900, 600);
@@ -240,3 +261,4 @@ public class JavaFX extends Application {
 		buttonWeek.setOnAction(e -> primaryStage.setScene(sceneWeek));
 	}
 }
+

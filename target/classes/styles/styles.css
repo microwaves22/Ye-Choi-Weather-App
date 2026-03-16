@@ -3,11 +3,16 @@
     -fx-background-color: white;
 }
 
+.navigation-bar-box
+ {
+    -fx-background-color: #6EA2EF;
+    -fx-alignment: center;
+    -fx-padding: 0;
+    -fx-pref-width: 80;
+ }
+
 .button {
     -fx-background-color: #ADD8E6;
-    -fx-text-fill: white;
-    -fx-font-size: 14;
-    -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 .button:hover {
@@ -75,3 +80,4 @@
 .image-view {
     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 4,0,0,1 );
 }
+
