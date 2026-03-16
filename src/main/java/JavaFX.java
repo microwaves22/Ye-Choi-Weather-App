@@ -10,8 +10,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Button;
 
 import javafx.scene.control.TextField;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -132,9 +130,10 @@ public class JavaFX extends Application {
 		infoAndAdsBox.setStyle ("-fx-background-color: grey;");
 
 		locationSearch = new HBox(10, locationInput, buttonSearch);
-		locationSearch.setStyle ("-fx-background-color: green;");
-		// set up header box
+		locationSearch.getStyleClass().add("locationSearch");
+
 		headerBox = new HBox(10, title, locationSearch);
+		headerBox.getStyleClass().add("headerBox");
 
 		// inside scene create to half one for navigation bar and other half of page
 		navigationBarBox = new VBox(10, buttonHome, button3Day, buttonWeek);
