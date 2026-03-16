@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
 
 import javafx.event.EventHandler;
+import javafx.scene.layout.BorderPane;
 
 public class JavaFX extends Application {
 	//
@@ -30,14 +31,13 @@ public class JavaFX extends Application {
 	Label title, advertisement, advertisementAnna, advertisementMichelle, adDetailsAnna, adDetailsMichelle, todayWeatherText;
 	Button buttonHome, buttonWeek, buttonSearch, buttonTemperature;
 	TextField locationInput, date, temperature, dayText, dayTemp, nightText, nightTemp, moodOfDay, mood, pictureOfMood, wind, direction, precipitation, humidity;
-	VBox headerAndInfoBox, navigationBarBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, windAndDirectionBox, precipAndHumidBox, moodBox;
+	VBox headerAndInfoBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, windAndDirectionBox, precipAndHumidBox, moodBox;
 
 	VBox weekBox, weekDay1Info, weekDay2Info, weekDay3Info, weekDay4Info, weekDay5Info, weekDay6Info, weekDay7Info;
-	HBox weekRoot, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7;
+	HBox navigationBarBox, weekRoot, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7;
 	TextField weekDay1, weekDay2, weekDay3, weekDay4, weekDay5, weekDay6, weekDay7;
 
 	HBox root, infoAndAdsBox, headerBox, locationSearch,  infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBoxAnna, adSplitBoxMichelle;
-	Scene sceneHome, sceneWeek;
 	Image weatherImage,searchImage, homeImage, weekImage, adImage, adImageMichelle, adImageAnna;
 	ImageView weatherIcon, searchIcon, homeIcon, weekIcon, adImageViewAnna, adImageViewMichelle;
 	HBox weekContent;
@@ -61,7 +61,6 @@ public class JavaFX extends Application {
 		weekCode();
 		setupLayouts(primaryStage);
 
-		primaryStage.setScene(sceneHome);
 		primaryStage.show();
 	}
 
@@ -86,7 +85,7 @@ public class JavaFX extends Application {
 		buttonWeek.setGraphic(weekIcon);
 
 		// inside scene create to half one for navigation bar and other half of page
-		navigationBarBox = new VBox(10, buttonHome, buttonWeek);
+		navigationBarBox = new HBox(10, buttonHome, buttonWeek);
 		navigationBarBox.getStyleClass().add("navigationBarBox");
 		navigationBarBox.setStyle("-fx-background-color: #6EA2EF;");
 	}
@@ -246,19 +245,18 @@ public class JavaFX extends Application {
 		weekContent = new HBox(10, weekBox, advertisementBoxMichelle);
 
 		weekHeaderAndInfoBox = new VBox(10,headerAndInfoBox, weekContent);
-		weekRoot = new HBox(navigationBarBox, weekHeaderAndInfoBox);
 
-		sceneWeek = new Scene(weekRoot, 900, 600);
-		sceneWeek.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+		BorderPane mainLayout = new BorderPane();
+		mainLayout.setTop(navigationBarBox);
+		mainLayout.setCenter(headerAndInfoBox);
 
-		// set up overall Scene
-		root = new HBox(navigationBarBox, headerAndInfoBox);
-		sceneHome = new Scene(root, 900, 600);
-		sceneHome.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+		Scene mainScene = new Scene(mainLayout, 900, 600);
+		mainScene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 
-		// button actions
-		buttonHome.setOnAction(e -> primaryStage.setScene(sceneHome));
-		buttonWeek.setOnAction(e -> primaryStage.setScene(sceneWeek));
+		primaryStage.setScene(mainScene);
+
+		buttonHome.setOnAction(e -> {mainLayout.setCenter(headerAndInfoBox);});
+		buttonWeek.setOnAction(e -> {mainLayout.setCenter(weekHeaderAndInfoBox);});
 	}
 }
 
