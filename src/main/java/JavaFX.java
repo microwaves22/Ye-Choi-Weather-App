@@ -55,7 +55,6 @@ public class JavaFX extends Application {
 		primaryStage.setTitle("Choi's Yeather App");
 
 		navigation();
-		header();
 		ads();
 		weatherInfo();
 		weekCode();
@@ -84,18 +83,11 @@ public class JavaFX extends Application {
 		buttonWeek = new Button();
 		buttonWeek.setGraphic(weekIcon);
 
-		// inside scene create to half one for navigation bar and other half of page
-		navigationBarBox = new HBox(10, buttonHome, buttonWeek);
-		navigationBarBox.getStyleClass().add("navigationBarBox");
-		navigationBarBox.setStyle("-fx-background-color: #6EA2EF;");
-	}
-
-	private void header() {
 		// Header Box Details
 		title = new Label("Choi's Yeather App");
 		title.getStyleClass().add("title");
 
-		locationInput = new TextField("Choose Location");
+		locationInput = new TextField("Choose Location          ");
 		searchImage = new Image(getClass().getResource("/icons/Search.png").toExternalForm());
 		searchIcon = new ImageView(searchImage);
 		searchIcon.setFitWidth(16);
@@ -104,6 +96,15 @@ public class JavaFX extends Application {
 
 		buttonSearch = new Button();
 		buttonSearch.setGraphic(searchIcon);
+
+		locationSearch = new HBox(10, locationInput, buttonSearch);
+		locationSearch.getStyleClass().add("locationSearch");
+
+		headerBox = new HBox(20, title, locationSearch);
+		headerBox.getStyleClass().add("headerBox");
+
+		navigationBarBox = new HBox(10, buttonHome, buttonWeek, headerBox);
+		navigationBarBox.getStyleClass().add("navigationBarBox");
 	}
 
 	private void ads() {
@@ -228,14 +229,6 @@ public class JavaFX extends Application {
 //     infoAndAdsBox.getStyleClass().add("infoAndAdsBox");
 //     infoAndAdsBox.setStyle ("-fx-background-color: grey;");
 
-		locationSearch = new HBox(10, locationInput, buttonSearch);
-		locationSearch.getStyleClass().add("locationSearch");
-
-		headerBox = new HBox(10, title, locationSearch);
-		headerBox.getStyleClass().add("headerBox");
-
-		headerAndInfoBox = new VBox(10, headerBox, infoAndAdsBox);
-		headerAndInfoBox.setStyle ("-fx-background-color: white;");
 
 		// week content
 		adSplitBoxMichelle = new HBox(10, adDetailsMichelle, adImageViewMichelle);
@@ -244,9 +237,10 @@ public class JavaFX extends Application {
 		advertisementBoxMichelle.getStyleClass().add("advertisementBox");
 		weekContent = new HBox(10, weekBox, advertisementBoxMichelle);
 
-		weekHeaderAndInfoBox = new VBox(10,headerAndInfoBox, weekContent);
+		weekHeaderAndInfoBox = new VBox(10,infoAndAdsBox, weekContent);
 
 		BorderPane mainLayout = new BorderPane();
+		mainLayout.getStyleClass().add("mainLayout");
 		mainLayout.setTop(navigationBarBox);
 		mainLayout.setCenter(headerAndInfoBox);
 
