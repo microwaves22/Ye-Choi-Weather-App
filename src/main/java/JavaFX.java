@@ -109,7 +109,8 @@ public class JavaFX extends Application {
 	private void ads() {
 		// Advertisement Box details
 		advertisementAnna = new Label("Advertisement");
-		adDetailsAnna = new Label("Looking for a local dental assistant? Look no farther!");
+		advertisementAnna.getStyleClass().add("ad-details");
+		adDetailsAnna = new Label("Looking for a local dental assistant? \nLook no further!");
 		adImageAnna = new Image(getClass().getResource("/linkedIn/Anna's_LinkedIn.jpg").toExternalForm());
 		adImageViewAnna = new ImageView(adImageAnna);
 		adImageViewAnna.setFitHeight(100);
@@ -123,7 +124,8 @@ public class JavaFX extends Application {
 		});
 
 		advertisementMichelle = new Label("Advertisement");
-		adDetailsMichelle = new Label("Michelle Ye");
+		advertisementMichelle.getStyleClass().add("ad-details");
+		adDetailsMichelle = new Label("Looking for a therapist? Look no further! \nYour own therapist with a B.S. in Psychology and hasn't finished her degree yet.");
 		adImageMichelle = new Image(getClass().getResource("/linkedIn/Michelle's_LinkedIn.jpg").toExternalForm());
 		adImageViewMichelle = new ImageView(adImageMichelle);
 		adImageViewMichelle.setFitHeight(100);
@@ -209,18 +211,10 @@ public class JavaFX extends Application {
 		adSplitBoxAnna.setAlignment(Pos.CENTER);
 		advertisementBoxAnna = new VBox(10, advertisementAnna, adSplitBoxAnna, linkAnna);
 		advertisementBoxAnna.getStyleClass().add("advertisementBox");
-//     advertisementBox.setStyle ("-fx-background-color: #FFD1DF;");
+
 		// set up info and ads box
-
-//		adSplitBox = new HBox(10, adDetails, adImageView);
-//		adSplitBox.setAlignment(Pos.CENTER);
-
 		weatherInformationBox = new VBox(10, infoSection, infoFirstSection, infoSecondSection, infoThirdSection);
 		weatherInformationBox.getStyleClass().add("weatherInformationBox");
-		// ad box
-		advertisementBoxAnna = new VBox(10, advertisementAnna, adSplitBoxAnna, linkAnna);
-		advertisementBoxAnna.getStyleClass().add("advertisementBox");
-//     advertisementBox.setStyle ("-fx-background-color: #FFD1DF;");
 		infoAndAdsBox = new HBox(10, weatherInformationBox, advertisementBoxAnna);
 
 		// set up info and ads box

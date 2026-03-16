@@ -81,3 +81,6 @@
     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 4,0,0,1 );
 }
 
+.ad-details {
+    -fx-font-weight: bold;
+}
