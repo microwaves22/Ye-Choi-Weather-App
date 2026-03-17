@@ -39,6 +39,10 @@
     -fx-alignment: center;
 }
 
+.weekBox {
+    -fx-padding: 5;
+}
+
 .locationSearch {
     -fx-padding: 5;
     -fx-alignment: center-right;
@@ -59,6 +63,7 @@
 }
 
 .advertisementBox {
+    -fx-margin-top: 10%;
     -fx-background-color: #FFD1DF;
     -fx-padding: 20;
     -fx-spacing: 15;

@@ -23,6 +23,10 @@ import javafx.scene.control.Hyperlink;
 import javafx.event.EventHandler;
 import javafx.scene.layout.BorderPane;
 
+import java.util.ArrayList;
+import weather.Period;
+import weather.WeatherAPI;
+
 public class JavaFX extends Application {
 	//
 	// INITIALIZING
@@ -33,15 +37,24 @@ public class JavaFX extends Application {
 	TextField locationInput, date, temperature, dayText, dayTemp, nightText, nightTemp, moodOfDay, mood, pictureOfMood, wind, direction, precipitation, humidity;
 	VBox headerAndInfoBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, windAndDirectionBox, precipAndHumidBox, moodBox;
 
-	VBox weekBox, weekDay1Info, weekDay2Info, weekDay3Info, weekDay4Info, weekDay5Info, weekDay6Info, weekDay7Info;
-	HBox navigationBarBox, weekRoot, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7;
-	TextField weekDay1, weekDay2, weekDay3, weekDay4, weekDay5, weekDay6, weekDay7;
+	VBox weekDay1Info, weekDay2Info, weekDay3Info, weekDay4Info, weekDay5Info, weekDay6Info, weekDay7Info;
+	HBox weekBox, navigationBarBox;
+	VBox weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7;
+	TextField weekDay1, weekDay1DayTemp, weekDay1NightTemp, weekDay1Precip, weekDay1Wind, weekDay1Direction, weekDay1Humidity;
+	TextField weekDay2, weekDay2DayTemp, weekDay2NightTemp, weekDay2Precip, weekDay2Wind, weekDay2Direction, weekDay2Humidity;
+	TextField weekDay3, weekDay3DayTemp, weekDay3NightTemp, weekDay3Precip, weekDay3Wind, weekDay3Direction, weekDay3Humidity;
+	TextField weekDay4, weekDay4DayTemp, weekDay4NightTemp, weekDay4Precip, weekDay4Wind, weekDay4Direction, weekDay4Humidity;
+	TextField weekDay5, weekDay5DayTemp, weekDay5NightTemp, weekDay5Precip, weekDay5Wind, weekDay5Direction, weekDay5Humidity;
+	TextField weekDay6, weekDay6DayTemp, weekDay6NightTemp, weekDay6Precip, weekDay6Wind, weekDay6Direction, weekDay6Humidity;
+	TextField weekDay7, weekDay7DayTemp, weekDay7NightTemp, weekDay7Precip, weekDay7Wind, weekDay7Direction, weekDay7Humidity;
 
 	HBox root, infoAndAdsBox, headerBox, locationSearch,  infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBoxAnna, adSplitBoxMichelle;
 	Image weatherImage,searchImage, homeImage, weekImage, adImage, adImageMichelle, adImageAnna;
 	ImageView weatherIcon, searchIcon, homeIcon, weekIcon, adImageViewAnna, adImageViewMichelle;
 	HBox weekContent;
 	VBox weekHeaderAndInfoBox;
+	double currentTempF;
+	String currentUnit = "F";
 
 	public static void main(String[] args) {
 		launch(args);
@@ -59,6 +72,8 @@ public class JavaFX extends Application {
 		weatherInfo();
 		weekCode();
 		setupLayouts(primaryStage);
+
+		loadWeather("LOT",77,70);;
 
 		primaryStage.show();
 	}
@@ -87,7 +102,7 @@ public class JavaFX extends Application {
 		title = new Label("Choi's Yeather App");
 		title.getStyleClass().add("title");
 
-		locationInput = new TextField("Choose Location          ");
+		locationInput = new TextField("Choose Location");
 		searchImage = new Image(getClass().getResource("/icons/Search.png").toExternalForm());
 		searchIcon = new ImageView(searchImage);
 		searchIcon.setFitWidth(16);
@@ -177,33 +192,115 @@ public class JavaFX extends Application {
 		moodBox = new VBox(10, moodOfDay, mood, pictureOfMood);
 
 		// sections
-		infoSection = new HBox(10, todayWeatherText, buttonTemperature );
-		infoFirstSection = new HBox(10, weatherIcon, temperature, date);
+		infoSection = new HBox(10, weatherIcon, todayWeatherText, buttonTemperature );
+		infoFirstSection = new HBox(10, temperature, date);
 		infoSecondSection = new HBox(10, dayText, dayTemp, nightText, nightTemp);
 		infoThirdSection = new HBox(10, windAndDirectionBox, precipAndHumidBox, moodBox);
 	}
 
 	private void weekCode() {
-		// WEEK CODE
-		weekDay1 = new TextField ("Day 1");
-		weekDay2 = new TextField ("Day 2");
-		weekDay3 = new TextField ("Day 3");
-		weekDay4 = new TextField ("Day 4");
-		weekDay5 = new TextField ("Day 5");
-		weekDay6 = new TextField ("Day 6");
-		weekDay7 = new TextField ("Day 7");
 
-		// temperature
-		weekRow1 = new HBox(10, weekDay1, new TextField("Temperature"));
-		weekRow2 = new HBox(10, weekDay2, new TextField("Temperature"));
-		weekRow3 = new HBox(10, weekDay3, new TextField("Temperature"));
-		weekRow4 = new HBox(10, weekDay4, new TextField("Temperature"));
-		weekRow5 = new HBox(10, weekDay5, new TextField("Temperature"));
-		weekRow6 = new HBox(10, weekDay6, new TextField("Temperature"));
-		weekRow7 = new HBox(10, weekDay7, new TextField("Temperature"));
+		// DAY 1
+		weekDay1 = new TextField("Day");
+		weekDay1DayTemp = new TextField("Day Temp");
+		weekDay1NightTemp = new TextField("Night Temp");
+		weekDay1Precip = new TextField("Precip");
+		weekDay1Wind = new TextField("Wind");
+		weekDay1Direction = new TextField("Direction");
+		weekDay1Humidity = new TextField("Humidity");
 
-		// weekBox
-		weekBox = new VBox(10, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7);
+		weekRow1 = new VBox(5,
+				weekDay1,
+				weekDay1DayTemp,
+				weekDay1NightTemp,
+				weekDay1Precip,
+				weekDay1Wind,
+				weekDay1Direction,
+				weekDay1Humidity
+		);
+
+		// DAY 2
+		weekDay2 = new TextField("Day");
+		weekDay2DayTemp = new TextField("Day Temp");
+		weekDay2NightTemp = new TextField("Night Temp");
+		weekDay2Precip = new TextField("Precip");
+		weekDay2Wind = new TextField("Wind");
+		weekDay2Direction = new TextField("Direction");
+		weekDay2Humidity = new TextField("Humidity");
+
+		weekRow2 = new VBox(5,
+				weekDay2,
+				weekDay2DayTemp,
+				weekDay2NightTemp,
+				weekDay2Precip,
+				weekDay2Wind,
+				weekDay2Direction,
+				weekDay2Humidity
+		);
+
+		// repeat pattern for remaining days
+
+		weekRow3 = new VBox(5,
+				weekDay3 = new TextField("Day"),
+				weekDay3DayTemp = new TextField("Day Temp"),
+				weekDay3NightTemp = new TextField("Night Temp"),
+				weekDay3Precip = new TextField("Precip"),
+				weekDay3Wind = new TextField("Wind"),
+				weekDay3Direction = new TextField("Direction"),
+				weekDay3Humidity = new TextField("Humidity")
+		);
+
+		weekRow4 = new VBox(5,
+				weekDay4 = new TextField("Day"),
+				weekDay4DayTemp = new TextField("Day Temp"),
+				weekDay4NightTemp = new TextField("Night Temp"),
+				weekDay4Precip = new TextField("Precip"),
+				weekDay4Wind = new TextField("Wind"),
+				weekDay4Direction = new TextField("Direction"),
+				weekDay4Humidity = new TextField("Humidity")
+		);
+
+		weekRow5 = new VBox(5,
+				weekDay5 = new TextField("Day"),
+				weekDay5DayTemp = new TextField("Day Temp"),
+				weekDay5NightTemp = new TextField("Night Temp"),
+				weekDay5Precip = new TextField("Precip"),
+				weekDay5Wind = new TextField("Wind"),
+				weekDay5Direction = new TextField("Direction"),
+				weekDay5Humidity = new TextField("Humidity")
+		);
+
+		weekRow6 = new VBox(5,
+				weekDay6 = new TextField("Day"),
+				weekDay6DayTemp = new TextField("Day Temp"),
+				weekDay6NightTemp = new TextField("Night Temp"),
+				weekDay6Precip = new TextField("Precip"),
+				weekDay6Wind = new TextField("Wind"),
+				weekDay6Direction = new TextField("Direction"),
+				weekDay6Humidity = new TextField("Humidity")
+		);
+
+		weekRow7 = new VBox(5,
+				weekDay7 = new TextField("Day"),
+				weekDay7DayTemp = new TextField("Day Temp"),
+				weekDay7NightTemp = new TextField("Night Temp"),
+				weekDay7Precip = new TextField("Precip"),
+				weekDay7Wind = new TextField("Wind"),
+				weekDay7Direction = new TextField("Direction"),
+				weekDay7Humidity = new TextField("Humidity")
+		);
+
+		weekBox = new HBox(10,
+				weekRow1,
+				weekRow2,
+				weekRow3,
+				weekRow4,
+				weekRow5,
+				weekRow6,
+				weekRow7
+		);
+
+		weekBox.getStyleClass().add("weekBox");
 	}
 
 	private void setupLayouts(Stage primaryStage) {
@@ -246,6 +343,111 @@ public class JavaFX extends Application {
 
 		buttonHome.setOnAction(e -> {mainLayout.setCenter(headerAndInfoBox);});
 		buttonWeek.setOnAction(e -> {mainLayout.setCenter(weekHeaderAndInfoBox);});
+		buttonSearch.setOnAction(e -> {
+
+			String location = locationInput.getText().toLowerCase();
+
+			if(location.contains("chicago")){
+				loadWeather("LOT",77,70);
+			}
+			else if(location.contains("new york")){
+				loadWeather("OKX",33,37);
+			}
+			else if(location.contains("los angeles")){
+				loadWeather("LOX",154,44);
+			}
+		});
+
+		buttonTemperature.setOnAction(e -> {
+
+			if(currentUnit.equals("F")){
+
+				double c = (currentTempF - 32) * 5/9;
+				temperature.setText(String.format("%.1f °C", c));
+
+				currentUnit = "C";
+			}
+			else if(currentUnit.equals("C")){
+
+				double k = (currentTempF - 32) * 5/9 + 273.15;
+				temperature.setText(String.format("%.1f K", k));
+
+				currentUnit = "K";
+			}
+			else{
+
+				temperature.setText(currentTempF + " °F");
+
+				currentUnit = "F";
+			}
+
+		});
+	}
+
+	private void loadWeather(String office, int gridX, int gridY) {
+
+		ArrayList<Period> forecast = WeatherAPI.getForecast(office, gridX, gridY);
+
+		if (forecast == null) {
+			throw new RuntimeException("Forecast did not load");
+		}
+
+		// TODAY
+		Period tonight = forecast.get(1);
+		Period today = forecast.get(0);
+
+		currentTempF = today.temperature;
+
+		temperature.setText(today.temperature + "°F");
+		dayText.setText(today.name);
+
+		// day / night temps
+		dayTemp.setText("Day: " + today.temperature + "°F");
+		nightText.setText(tonight.name);
+		nightTemp.setText("Night: " + tonight.temperature + "°F");
+
+		// wind
+		wind.setText(today.windSpeed);
+		direction.setText(today.windDirection);
+
+		// precipitation (from forecast text)
+		precipitation.setText(today.shortForecast);
+
+		// humidity (NWS API usually doesn't give this easily)
+		humidity.setText("Humidity: N/A");
+
+		// mood logic
+		int temp = today.temperature;
+
+		if(temp < 50){
+			moodOfDay.setText("Mood of the Day:");
+			mood.setText("Sad");
+//			pictureOfMood.setText("Cold Day");
+		}
+		else if(temp < 70){
+			moodOfDay.setText("Mood of the Day:");
+			mood.setText("Chill");
+//			pictureOfMood.setText("Cool Weather");
+		}
+		else if(temp < 85){
+			moodOfDay.setText("Mood of the Day:");
+			mood.setText("Happy");
+//			pictureOfMood.setText("Nice Day");
+		}
+		else{
+			moodOfDay.setText("Mood of the Day:");
+			mood.setText("Hot");
+//			pictureOfMood.setText("Too Hot");
+		}
+
+		// WEEK
+		weekDay1.setText(forecast.get(0).name);
+		weekDay1DayTemp.setText("Day: " + forecast.get(0).temperature + "°F");
+		weekDay1NightTemp.setText("Night: " + forecast.get(1).temperature + "°F");
+		weekDay1Wind.setText("Wind: " + forecast.get(0).windSpeed);
+		weekDay1Direction.setText("Dir: " + forecast.get(0).windDirection);
+		weekDay1Humidity.setText("Humidity: N/A");
+		weekDay1Precip.setText("Precip: N/A");
 	}
 }
 
