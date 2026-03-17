@@ -231,7 +231,8 @@ public class JavaFX extends Application {
 		advertisementBoxMichelle.getStyleClass().add("advertisementBox");
 		weekContent = new HBox(10, weekBox, advertisementBoxMichelle);
 
-		weekHeaderAndInfoBox = new VBox(10,infoAndAdsBox, weekContent);
+		headerAndInfoBox = new VBox(10, infoAndAdsBox);
+		weekHeaderAndInfoBox = new VBox(10, weekContent);
 
 		BorderPane mainLayout = new BorderPane();
 		mainLayout.getStyleClass().add("mainLayout");
