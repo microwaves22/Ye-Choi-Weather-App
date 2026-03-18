@@ -102,7 +102,7 @@ public class JavaFX extends Application {
 		advertisementMichelle = new Label("Advertisement");
 		advertisementMichelle.getStyleClass().add("ad-details");
 		adDetailsMichelle = new Label("Looking for a therapist?");
-		adImageViewMichelle = new ImageView(new Image(getClass().getResource("/linkedIn/Michelle's_LinkedIn.jpg").toExternalForm()));
+		adImageViewMichelle = new ImageView(new Image(getClass().getResource("/linkedIn/Michelle's_LinkedIn.png").toExternalForm()));
 		adImageViewMichelle.setFitHeight(100); adImageViewMichelle.setFitWidth(100);
 		linkMichelle = new Hyperlink("Visit Michelle's LinkedIn");
 		linkMichelle.setOnAction(e -> getHostServices().showDocument("https://www.linkedin.com/in/michelle-ye-700911299/"));
@@ -242,7 +242,7 @@ public class JavaFX extends Application {
 		mainLayout.setTop(navigationBarBox);
 		mainLayout.setCenter(headerAndInfoBox);
 
-		Scene mainScene = new Scene(mainLayout, 950, 650);
+		Scene mainScene = new Scene(mainLayout, 950, 500);
 		mainScene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 		primaryStage.setScene(mainScene);
 
