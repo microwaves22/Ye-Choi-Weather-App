@@ -12,11 +12,11 @@ import weather.WeatherAPI;
 
 public class JavaFX extends Application {
 
-	Label title, todayWeatherText, advertisementAnna, advertisementMichelle, adDetailsAnna, adDetailsMichelle;
+	Label title, todayWeatherText, advertisementAnna, advertisementMichelle, adDetailsAnna, adDetailsMichelle, moodOfDay, dayText, nightText;
 	Button buttonHome, buttonWeek, buttonSearch, buttonTemperature;
 	Hyperlink linkAnna, linkMichelle;
 
-	TextField locationInput, date, temperature, dayText, dayTemp, nightText, nightTemp, moodOfDay, mood, pictureOfMood, wind, direction, precipitation, humidity;
+	TextField locationInput, date, temperature, dayTemp, nightTemp, mood, wind, direction, precipitation, humidity;
 
 	// Day 1
 	TextField weekDay1, weekDay1DayTemp, weekDay1NightTemp, weekDay1Precip, weekDay1Wind, weekDay1Direction, weekDay1Humidity;
@@ -36,7 +36,7 @@ public class JavaFX extends Application {
 	VBox headerAndInfoBox, weekHeaderAndInfoBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, windAndDirectionBox, precipAndHumidBox, moodBox;
 	HBox weekBox, navigationBarBox, infoAndAdsBox, infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBoxAnna, adSplitBoxMichelle, weekContent;
 
-	ImageView weatherIcon, searchIcon, homeIcon, weekIcon, adImageViewAnna, adImageViewMichelle;
+	ImageView weatherIcon, searchIcon, homeIcon, weekIcon, adImageViewAnna, adImageViewMichelle, pictureOfMood;
 
 	double currentTempF;
 	String currentUnit = "F";
@@ -110,31 +110,44 @@ public class JavaFX extends Application {
 
 	private void weatherInfo() {
 		weatherIcon = new ImageView(new Image(getClass().getResource("/icons/Weather.png").toExternalForm()));
-		weatherIcon.setFitHeight(50); weatherIcon.setFitWidth(50);
+		weatherIcon.setFitHeight(70); weatherIcon.setFitWidth(70);
 		buttonTemperature = new Button("K/F/C");
 
 		todayWeatherText = new Label("Today's Weather");
 		temperature = new TextField();
+		temperature.setEditable(false);
 		date = new TextField();
-		dayText = new TextField();
+		date.setEditable(false);
+		dayText = new Label("Day: ");
 		dayTemp = new TextField();
-		nightText = new TextField();
+		dayTemp.setEditable(false);
+		nightText = new Label("Night: ");
 		nightTemp = new TextField();
+		nightTemp.setEditable(false);
 		wind = new TextField();
+		wind.setEditable(false);
 		direction = new TextField();
+		direction.setEditable(false);
 		precipitation = new TextField();
-		humidity = new TextField();
-		moodOfDay = new TextField("Mood of the Day:");
+		precipitation.setEditable(false);
+		humidity = new TextField("Humid");
+		humidity.setEditable(false);
+		moodOfDay = new Label("Mood of the Day:");
 		mood = new TextField();
-		pictureOfMood = new TextField();
+		mood.setEditable(false);
+		pictureOfMood = new ImageView();
 
-		windAndDirectionBox = new VBox(10, new Label("Wind Info"), wind, direction);
+		windAndDirectionBox = new VBox(10, new Label("Wind Information"), wind, direction);
 		precipAndHumidBox = new VBox(10, new Label("Stats"), precipitation, humidity);
-		moodBox = new VBox(10, moodOfDay, mood);
+		moodBox = new VBox(10, moodOfDay, mood, pictureOfMood);
+		moodBox.setAlignment(Pos.CENTER);
 
 		infoSection = new HBox(10, weatherIcon, todayWeatherText, buttonTemperature);
+		infoSection.setAlignment(Pos.CENTER_LEFT);
 		infoFirstSection = new HBox(10, new Label("Temp:"), temperature, new Label("Date:"), date);
+		infoFirstSection.setAlignment(Pos.CENTER_LEFT);
 		infoSecondSection = new HBox(10, dayText, dayTemp, nightText, nightTemp);
+		infoSecondSection.setAlignment(Pos.CENTER_LEFT);
 		infoThirdSection = new HBox(10, windAndDirectionBox, precipAndHumidBox, moodBox);
 	}
 
@@ -271,15 +284,27 @@ public class JavaFX extends Application {
 
 		temperature.setText(today.temperature + "°F");
 		date.setText(today.name);
-		dayTemp.setText("Day: " + today.temperature + "°F");
-		nightTemp.setText("Night: " + tonight.temperature + "°F");
-		wind.setText(today.windSpeed);
-		direction.setText(today.windDirection);
+		dayTemp.setText(today.temperature + "°F");
+		nightTemp.setText(tonight.temperature + "°F");
+		wind.setText("Speed: " + today.windSpeed);
+		direction.setText("Direction: " + today.windDirection);
 		precipitation.setText(today.shortForecast);
 
-		if(currentTempF < 50) mood.setText("Sad");
-		else if(currentTempF < 75) mood.setText("Chill");
-		else mood.setText("Happy");
+		if(currentTempF < 50) {
+			mood.setText("Sadge (◞ ‸ ◟)");
+			pictureOfMood.setImage(new Image(getClass().getResource("/images/sadgeCat.jpg").toExternalForm()));
+			pictureOfMood.setFitHeight(90); pictureOfMood.setFitWidth(90);
+		}
+		else if(currentTempF < 75) {
+			mood.setText("Chilling (─ ‿ ─)");
+			pictureOfMood.setImage(new Image(getClass().getResource("/images/chillingCat.jpg").toExternalForm()));
+			pictureOfMood.setFitHeight(70); pictureOfMood.setFitWidth(70);
+		}
+		else {
+			mood.setText("Happy ◝(ᵔᗜᵔ)◜");
+			pictureOfMood.setImage(new Image(getClass().getResource("/images/sunnyDay.jpg").toExternalForm()));
+			pictureOfMood.setFitHeight(70); pictureOfMood.setFitWidth(70);
+		}
 
 		weekDay1.setText(forecast.get(0).name);
 		weekDay1DayTemp.setText(forecast.get(0).temperature + "°F");
