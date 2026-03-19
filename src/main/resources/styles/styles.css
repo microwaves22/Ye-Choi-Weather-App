@@ -6,6 +6,7 @@
 .navigationBarBox {
     -fx-background-color: linear-gradient(to right, #6EA2EF, #4f85e0);
     -fx-alignment: center-left;
+    -fx-background-radius: 12;
     -fx-padding: 10;
     -fx-spacing: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6,0,0,2);
@@ -33,7 +34,7 @@
     -fx-alignment: center-right;
     -fx-background-color: white;
     -fx-background-radius: 12;
-    -fx-padding: 12;
+    -fx-padding: 10;
     -fx-spacing: 15;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8,0,0,2);
 }
@@ -79,7 +80,7 @@
 
 .advertisementBox {
     -fx-background-color: linear-gradient(to bottom, #FFD1DF, #ffc2d6);
-    -fx-padding: 20;
+    -fx-padding: 10;
     -fx-spacing: 15;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6,0,0,2);
@@ -99,10 +100,19 @@
 }
 
 .image-view {
-    -fx-effect: dropshadow(Gaussian , rgba(0,0,0,0.2) , 6,0,0,2 );
+    -fx-effect: dropshadow(Gaussian , rgba(0,0,0,0.2) , 6,0,0,2);
 }
 
 .ad-details {
     -fx-font-weight: bold;
     -fx-font-size: 16px;
+}
+
+.day {
+    -fx-background-color: #E7FAEE;
+    -fx-padding: 10;
+    -fx-spacing: 15;
+    -fx-background-radius: 12;
+    -fx-alignment: top-center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6,0,0,2);
 }

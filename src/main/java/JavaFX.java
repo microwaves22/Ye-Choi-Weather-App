@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
@@ -9,34 +10,48 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import weather.Period;
 import weather.WeatherAPI;
+import java.time.LocalDate;
 
 public class JavaFX extends Application {
 
-	Label title, todayWeatherText, advertisementAnna, advertisementMichelle, adDetailsAnna, adDetailsMichelle, moodOfDay, dayText, nightText;
-	Button buttonHome, buttonWeek, buttonSearch, buttonTemperature;
-	Hyperlink linkAnna, linkMichelle;
+	Label title, todayWeatherText, advertisementAnna, advertisementMichelle, advertisementMaple, adDetailsAnna, adDetailsMichelle, adDetailsMaple, moodOfDay, dayText, nightText;
+	Button buttonHome, buttonWeek, day3Button, buttonSearch, buttonTemperature;
+	Hyperlink linkAnna, linkMichelle, linkMaple;
 
 	TextField locationInput, date, temperature, dayTemp, nightTemp, mood, wind, direction, precipitation, humidity;
 
 	// Day 1
-	TextField weekDay1, weekDay1DayTemp, weekDay1NightTemp, weekDay1Precip, weekDay1Wind, weekDay1Direction, weekDay1Humidity;
+	Label day1Date, day1Temp, day1DayTemp, day1NightTemp, day1Wind;
+	TextField day1Precip, day1Humidity;
 	// Day 2
-	TextField weekDay2, weekDay2DayTemp, weekDay2NightTemp, weekDay2Precip, weekDay2Wind, weekDay2Direction, weekDay2Humidity;
+	Label day2Date, day2Temp, day2DayTemp, day2NightTemp, day2Wind;
+	TextField day2Precip, day2Humidity;
 	// Day 3
+	Label day3Date, day3Temp, day3DayTemp, day3NightTemp, day3Wind;
+	TextField day3Precip, day3Humidity;
+
+	VBox day3HeaderAndInfoBox, day1Info, day2Info, day3Info;
+	HBox day3Content, threeDaysInfoSec, day1Temps, day2Temps, day3Temps;
+
+	// Week Day 1
+	TextField weekDay1, weekDay1DayTemp, weekDay1NightTemp, weekDay1Precip, weekDay1Wind, weekDay1Direction, weekDay1Humidity;
+	// Week Day 2
+	TextField weekDay2, weekDay2DayTemp, weekDay2NightTemp, weekDay2Precip, weekDay2Wind, weekDay2Direction, weekDay2Humidity;
+	// Week Day 3
 	TextField weekDay3, weekDay3DayTemp, weekDay3NightTemp, weekDay3Precip, weekDay3Wind, weekDay3Direction, weekDay3Humidity;
-	// Day 4
+	// Week Day 4
 	TextField weekDay4, weekDay4DayTemp, weekDay4NightTemp, weekDay4Precip, weekDay4Wind, weekDay4Direction, weekDay4Humidity;
-	// Day 5
+	// Week Day 5
 	TextField weekDay5, weekDay5DayTemp, weekDay5NightTemp, weekDay5Precip, weekDay5Wind, weekDay5Direction, weekDay5Humidity;
-	// Day 6
+	// Week Day 6
 	TextField weekDay6, weekDay6DayTemp, weekDay6NightTemp, weekDay6Precip, weekDay6Wind, weekDay6Direction, weekDay6Humidity;
-	// Day 7
+	// Week Day 7
 	TextField weekDay7, weekDay7DayTemp, weekDay7NightTemp, weekDay7Precip, weekDay7Wind, weekDay7Direction, weekDay7Humidity;
 
-	VBox headerAndInfoBox, weekHeaderAndInfoBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, windAndDirectionBox, precipAndHumidBox, moodBox;
-	HBox weekBox, navigationBarBox, infoAndAdsBox, infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBoxAnna, adSplitBoxMichelle, weekContent;
+	VBox headerAndInfoBox, weekHeaderAndInfoBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, advertisementBoxMaple, windAndDirectionBox, precipAndHumidBox, moodBox;
+	HBox weekBox, navigationBarBox, infoAndAdsBox, infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBoxAnna, adSplitBoxMichelle, adSplitBoxMaple, weekContent;
 
-	ImageView weatherIcon, searchIcon, homeIcon, weekIcon, adImageViewAnna, adImageViewMichelle, pictureOfMood;
+	ImageView weatherIcon, searchIcon, homeIcon, day3Icon, weekIcon, adImageViewAnna, adImageViewMichelle, adImageViewMaple, pictureOfMood;
 
 	double currentTempF;
 	String currentUnit = "F";
@@ -52,6 +67,7 @@ public class JavaFX extends Application {
 		navigation();
 		ads();
 		weatherInfo();
+		day3Code();
 		weekCode();
 		setupLayouts(primaryStage);
 
@@ -65,6 +81,11 @@ public class JavaFX extends Application {
 		homeIcon.setFitWidth(40); homeIcon.setFitHeight(40); homeIcon.setPreserveRatio(true);
 		buttonHome = new Button();
 		buttonHome.setGraphic(homeIcon);
+
+		day3Icon = new ImageView(new Image(getClass().getResource("/icons/3-Day.png").toExternalForm()));
+		day3Icon.setFitWidth(40); day3Icon.setFitHeight(40); day3Icon.setPreserveRatio(true);
+		day3Button = new Button();
+		day3Button.setGraphic(day3Icon);
 
 		weekIcon = new ImageView(new Image(getClass().getResource("/icons/Week.png").toExternalForm()));
 		weekIcon.setFitWidth(40); weekIcon.setFitHeight(40); weekIcon.setPreserveRatio(true);
@@ -86,7 +107,7 @@ public class JavaFX extends Application {
 		HBox headerBox = new HBox(20, title, locationSearch);
 		headerBox.getStyleClass().add("headerBox");
 
-		navigationBarBox = new HBox(10, buttonHome, buttonWeek, headerBox);
+		navigationBarBox = new HBox(10, buttonHome, day3Button, buttonWeek, headerBox);
 		navigationBarBox.getStyleClass().add("navigationBarBox");
 	}
 
@@ -106,6 +127,14 @@ public class JavaFX extends Application {
 		adImageViewMichelle.setFitHeight(100); adImageViewMichelle.setFitWidth(100);
 		linkMichelle = new Hyperlink("Visit Michelle's LinkedIn");
 		linkMichelle.setOnAction(e -> getHostServices().showDocument("https://www.linkedin.com/in/michelle-ye-700911299/"));
+
+		advertisementMaple = new Label("Advertisement");
+		advertisementMaple.getStyleClass().add("ad-details");
+		adDetailsMaple = new Label("Look at this DIFFERENT and \nUNLIKE the other girls cat in the world");
+		adImageViewMaple = new ImageView(new Image(getClass().getResource("/linkedIn/Maple_LinkedIn.jpg").toExternalForm()));
+		adImageViewMaple.setFitHeight(100); adImageViewMaple.setFitWidth(100);
+		linkMaple = new Hyperlink("Adopt a cat!");
+		linkMaple.setOnAction(e -> getHostServices().showDocument("https://www.pawschicago.org/"));
 	}
 
 	private void weatherInfo() {
@@ -151,6 +180,52 @@ public class JavaFX extends Application {
 		infoThirdSection = new HBox(10, windAndDirectionBox, precipAndHumidBox, moodBox);
 	}
 
+	private void day3Code() {
+		LocalDate today = LocalDate.now();
+		day1Date = new Label(today.toString());
+		day1Temp = new Label();
+		day1DayTemp = new Label();
+		day1NightTemp = new Label();
+		day1Precip = new TextField();
+		day1Wind = new Label();
+		day1Humidity = new TextField();
+
+		LocalDate tomorrow = today.plusDays(1);
+		day2Date = new Label(tomorrow.toString());
+		day2Temp = new Label();
+		day2DayTemp = new Label();
+		day2NightTemp = new Label();
+		day2Precip = new TextField();
+		day2Wind = new Label();
+		day2Humidity = new TextField();
+
+		LocalDate overmorrow = today.plusDays(2);
+		day3Date = new Label(overmorrow.toString());
+		day3Temp = new Label();
+		day3DayTemp = new Label();
+		day3NightTemp = new Label();
+		day3Precip = new TextField();
+		day3Wind = new Label();
+		day3Humidity = new TextField();
+
+		day1Temps = new HBox(10, day1DayTemp, day1NightTemp);
+		day1Temps.setAlignment(Pos.CENTER);
+		day1Info = new VBox(10, day1Date, day1Temp, day1Temps, day1Wind, day1Precip, day1Humidity);
+		day1Info.getStyleClass().add("day");
+
+		day2Temps = new HBox(10, day2DayTemp, day2NightTemp);
+		day2Temps.setAlignment(Pos.CENTER);
+		day2Info = new VBox(10, day2Date, day2Temp, day2Temps, day2Wind, day2Precip, day2Humidity);
+		day2Info.getStyleClass().add("day");
+
+		day3Temps = new HBox(10 ,day3DayTemp, day3NightTemp);
+		day3Temps.setAlignment(Pos.CENTER);
+		day3Info = new VBox(10, day3Date, day3Temp, day3Temps, day3Wind, day3Precip, day3Humidity);
+		day3Info.getStyleClass().add("day");
+
+		threeDaysInfoSec = new HBox(10, day1Info, day2Info, day3Info);
+	}
+
 	private void weekCode() {
 		weekDay1 = new TextField();
 		weekDay1.setEditable(false);
@@ -167,6 +242,7 @@ public class JavaFX extends Application {
 		weekDay1Humidity = new TextField();
 		weekDay1Humidity.setEditable(false);
 		VBox weekRow1 = new VBox(5, new Label("Day 1"), weekDay1, weekDay1DayTemp, weekDay1NightTemp, weekDay1Wind);
+		weekRow1.getStyleClass().add("day");
 
 		weekDay2 = new TextField();
 		weekDay2.setEditable(false);
@@ -183,6 +259,7 @@ public class JavaFX extends Application {
 		weekDay2Humidity = new TextField();
 		weekDay2Humidity.setEditable(false);
 		VBox weekRow2 = new VBox(5, new Label("Day 2"), weekDay2, weekDay2DayTemp, weekDay2NightTemp, weekDay2Wind);
+		weekRow2.getStyleClass().add("day");
 
 		weekDay3 = new TextField();
 		weekDay3.setEditable(false);
@@ -199,6 +276,7 @@ public class JavaFX extends Application {
 		weekDay3Humidity = new TextField();
 		weekDay3Humidity.setEditable(false);
 		VBox weekRow3 = new VBox(5, new Label("Day 3"), weekDay3, weekDay3DayTemp, weekDay3NightTemp, weekDay3Wind);
+		weekRow3.getStyleClass().add("day");
 
 		weekDay4 = new TextField();
 		weekDay4.setEditable(false);
@@ -215,6 +293,7 @@ public class JavaFX extends Application {
 		weekDay4Humidity = new TextField();
 		weekDay4Humidity.setEditable(false);
 		VBox weekRow4 = new VBox(5, new Label("Day 4"), weekDay4, weekDay4DayTemp, weekDay4NightTemp, weekDay4Wind);
+		weekRow4.getStyleClass().add("day");
 
 		weekDay5 = new TextField();
 		weekDay5.setEditable(false);
@@ -231,6 +310,7 @@ public class JavaFX extends Application {
 		weekDay5Humidity = new TextField();
 		weekDay5Humidity.setEditable(false);
 		VBox weekRow5 = new VBox(5, new Label("Day 5"), weekDay5, weekDay5DayTemp, weekDay5NightTemp, weekDay5Wind);
+		weekRow5.getStyleClass().add("day");
 
 		weekDay6 = new TextField();
 		weekDay6.setEditable(false);
@@ -247,6 +327,7 @@ public class JavaFX extends Application {
 		weekDay6Humidity = new TextField();
 		weekDay6Humidity.setEditable(false);
 		VBox weekRow6 = new VBox(5, new Label("Day 6"), weekDay6, weekDay6DayTemp, weekDay6NightTemp, weekDay6Wind);
+		weekRow6.getStyleClass().add("day");
 
 		weekDay7 = new TextField();
 		weekDay7.setEditable(false);
@@ -263,6 +344,7 @@ public class JavaFX extends Application {
 		weekDay7Humidity = new TextField();
 		weekDay7Humidity.setEditable(false);
 		VBox weekRow7 = new VBox(5, new Label("Day 7"), weekDay7, weekDay7DayTemp, weekDay7NightTemp, weekDay7Wind);
+		weekRow7.getStyleClass().add("day");
 
 		weekBox = new HBox(10, weekRow1, weekRow2, weekRow3, weekRow4, weekRow5, weekRow6, weekRow7);
 		weekBox.getStyleClass().add("weekBox");
@@ -283,19 +365,32 @@ public class JavaFX extends Application {
 		advertisementBoxMichelle = new VBox(10, advertisementMichelle, adSplitBoxMichelle, linkMichelle);
 		advertisementBoxMichelle.getStyleClass().add("advertisementBox");
 
+		weekBox.getStyleClass().add("weatherInformationBox");
 		weekContent = new HBox(10, weekBox, advertisementBoxMichelle);
 		weekHeaderAndInfoBox = new VBox(10, weekContent);
+
+		adSplitBoxMaple = new HBox(10, adDetailsMaple, adImageViewMaple);
+		advertisementBoxMaple = new VBox(10, advertisementMaple, adSplitBoxMaple, linkMaple);
+		advertisementBoxMaple.getStyleClass().add("advertisementBox");
+
+		threeDaysInfoSec.getStyleClass().add("weatherInformationBox");
+		day3Content = new HBox(10, threeDaysInfoSec, advertisementBoxMaple);
+		day3HeaderAndInfoBox = new VBox(10, day3Content);
 
 		BorderPane mainLayout = new BorderPane();
 		mainLayout.getStyleClass().add("mainLayout");
 		mainLayout.setTop(navigationBarBox);
 		mainLayout.setCenter(headerAndInfoBox);
+		BorderPane.setMargin(headerAndInfoBox, new Insets(10, 0, 0, 0));
+		BorderPane.setMargin(day3HeaderAndInfoBox, new Insets(10, 0, 0, 0));
+		BorderPane.setMargin(weekHeaderAndInfoBox, new Insets(10, 0, 0, 0));
 
 		Scene mainScene = new Scene(mainLayout, 950, 500);
 		mainScene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 		primaryStage.setScene(mainScene);
 
 		buttonHome.setOnAction(e -> mainLayout.setCenter(headerAndInfoBox));
+		day3Button.setOnAction(e -> mainLayout.setCenter(day3HeaderAndInfoBox));
 		buttonWeek.setOnAction(e -> mainLayout.setCenter(weekHeaderAndInfoBox));
 
 		buttonSearch.setOnAction(e -> {
@@ -342,18 +437,39 @@ public class JavaFX extends Application {
 		if(currentTempF < 50) {
 			mood.setText("Sadge (◞ ‸ ◟)");
 			pictureOfMood.setImage(new Image(getClass().getResource("/images/sadgeCat.jpg").toExternalForm()));
+			pictureOfMood.getStyleClass().add("image-view");
 			pictureOfMood.setFitHeight(90); pictureOfMood.setFitWidth(90);
 		}
 		else if(currentTempF < 75) {
 			mood.setText("Chilling (─ ‿ ─)");
 			pictureOfMood.setImage(new Image(getClass().getResource("/images/chillingCat.jpg").toExternalForm()));
+			pictureOfMood.getStyleClass().add("image-view");
 			pictureOfMood.setFitHeight(70); pictureOfMood.setFitWidth(70);
 		}
 		else {
 			mood.setText("Happy ◝(ᵔᗜᵔ)◜");
 			pictureOfMood.setImage(new Image(getClass().getResource("/images/sunnyDay.jpg").toExternalForm()));
+			pictureOfMood.getStyleClass().add("image-view");
 			pictureOfMood.setFitHeight(70); pictureOfMood.setFitWidth(70);
 		}
+
+		day1Temp.setText(forecast.get(0).name);
+		day1DayTemp.setText(forecast.get(0).temperature + "°F");
+		day1NightTemp.setText(forecast.get(1).temperature + "°F");
+		day1Wind.setText("Wind: " + forecast.get(0).windDirection + " " + forecast.get(0).windSpeed);
+		day1Precip.setText(forecast.get(0).shortForecast);
+
+		day2Temp.setText(forecast.get(2).name);
+		day2DayTemp.setText(forecast.get(2).temperature + "°F");
+		day2NightTemp.setText(forecast.get(3).temperature + "°F");
+		day2Wind.setText("Wind: " + forecast.get(2).windDirection + " " + forecast.get(2).windSpeed);
+		day2Precip.setText(forecast.get(2).shortForecast);
+
+		day3Temp.setText(forecast.get(4).name);
+		day3DayTemp.setText(forecast.get(4).temperature + "°F");
+		day3NightTemp.setText(forecast.get(5).temperature + "°F");
+		day3Wind.setText("Wind: " + forecast.get(4).windDirection + " " + forecast.get(4).windSpeed);
+		day3Precip.setText(forecast.get(4).shortForecast);
 
 		weekDay1.setText(forecast.get(0).name);
 		weekDay1DayTemp.setText(forecast.get(0).temperature + "°F");
