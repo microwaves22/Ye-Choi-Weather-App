@@ -10,16 +10,24 @@ import java.util.ArrayList;
 import weather.Period;
 import weather.WeatherAPI;
 import java.text.SimpleDateFormat;
+import javafx.geometry.Insets;
+import java.time.LocalDate;
 
 // use https://api.weather.gov/gridpoints/LOT/77,70/forecast to see where data is
 // idk how to do humidity, lets just scratch it.
 
 public class JavaFX extends Application {
 
-	Label title, todayWeatherText, advertisementAnna, advertisementMichelle, moodOfDay, dayText, nightText;
-	Button buttonHome, buttonWeek, buttonSearch, buttonTemperature;
-	Hyperlink linkAnna, linkMichelle;
-	TextArea precipitation, adDetailsAnna, adDetailsMichelle;
+	Label day3Date, day3Temp, day3DayTemp, day3NightTemp, day3Wind;
+	Label day2Date, day2Temp, day2DayTemp, day2NightTemp, day2Wind;
+	Label day1Date, day1Temp, day1DayTemp, day1NightTemp, day1Wind;
+	TextField day1Precip, day1Humidity;
+	TextField day2Precip, day2Humidity;
+	TextField day3Precip, day3Humidity;
+	Label title, todayWeatherText, advertisementMaple, advertisementAnna, advertisementMichelle, moodOfDay, dayText, nightText;
+	Button buttonHome, day3Button, buttonWeek, buttonSearch, buttonTemperature;
+	Hyperlink linkAnna, linkMichelle, linkMaple;
+	TextArea precipitation, adDetailsAnna, adDetailsMichelle, adDetailsMaple;
 	TextField locationInput, date, temperature, dayTemp, nightTemp, mood, wind, direction;
 
 	// Day 1
@@ -37,10 +45,13 @@ public class JavaFX extends Application {
 	// Day 7
 	TextField weekDay7, weekDay7DayTemp, weekDay7NightTemp, weekDay7Precip, weekDay7Wind, weekDay7Direction, weekDay7Humidity;
 
-	VBox headerAndInfoBox, weekHeaderAndInfoBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, windAndDirectionBox, precipAndHumidBox, moodBox;
+	VBox headerAndInfoBox, weekHeaderAndInfoBox, weatherInformationBox, advertisementBoxAnna, advertisementBoxMichelle, advertisementBoxMaple, windAndDirectionBox, precipAndHumidBox, moodBox;
 	HBox weekBox, navigationBarBox, infoAndAdsBox, infoSection, infoFirstSection, infoSecondSection, infoThirdSection, adSplitBoxAnna, adSplitBoxMichelle, weekContent;
 
-	ImageView weatherIcon, searchIcon, homeIcon, weekIcon, adImageViewAnna, adImageViewMichelle, pictureOfMood;
+	ImageView weatherIcon, searchIcon, homeIcon, day3Icon, weekIcon, adImageViewAnna, adImageViewMichelle, adImageViewMaple, pictureOfMood;
+
+	VBox day3HeaderAndInfoBox, day1Info, day2Info, day3Info;
+	HBox day3Content, threeDaysInfoSec, day1Temps, day2Temps, day3Temps;
 
 	double currentTempF;
 	String currentUnit = "F";
@@ -57,6 +68,7 @@ public class JavaFX extends Application {
 		ads();
 		weatherInfo();
 		weekCode();
+		day3Code();
 		setupLayouts(primaryStage);
 
 		loadWeather("LOT", 77, 70); // Default to Chicago
@@ -69,6 +81,11 @@ public class JavaFX extends Application {
 		homeIcon.setFitWidth(40); homeIcon.setFitHeight(40); homeIcon.setPreserveRatio(true);
 		buttonHome = new Button();
 		buttonHome.setGraphic(homeIcon);
+
+		day3Icon = new ImageView(new Image(getClass().getResource("/icons/3-Day.png").toExternalForm()));
+		day3Icon.setFitWidth(40); day3Icon.setFitHeight(40); day3Icon.setPreserveRatio(true);
+		day3Button = new Button();
+		day3Button.setGraphic(day3Icon);
 
 		weekIcon = new ImageView(new Image(getClass().getResource("/icons/Week.png").toExternalForm()));
 		weekIcon.setFitWidth(40); weekIcon.setFitHeight(40); weekIcon.setPreserveRatio(true);
@@ -90,7 +107,7 @@ public class JavaFX extends Application {
 		HBox headerBox = new HBox(20, title, locationSearch);
 		headerBox.getStyleClass().add("headerBox");
 
-		navigationBarBox = new HBox(10, buttonHome, buttonWeek, headerBox);
+		navigationBarBox = new HBox(10, buttonHome, day3Button, buttonWeek, headerBox);
 		navigationBarBox.getStyleClass().add("navigationBarBox");
 	}
 
@@ -119,6 +136,18 @@ public class JavaFX extends Application {
 		adImageViewMichelle.setFitHeight(100); adImageViewMichelle.setFitWidth(100);
 		linkMichelle = new Hyperlink("Visit Michelle's LinkedIn");
 		linkMichelle.setOnAction(e -> getHostServices().showDocument("https://www.linkedin.com/in/michelle-ye-700911299/"));
+
+		advertisementMaple = new Label("Advertisement");
+		advertisementMaple.getStyleClass().add("ad-details");
+		adDetailsMaple = new TextArea("Look at this DIFFERENT and \nUNLIKE the other girls cat in the world");
+		adImageViewMaple = new ImageView(new Image(getClass().getResource("/linkedIn/Maple_LinkedIn.jpg").toExternalForm()));
+		adDetailsMaple.setWrapText(true);
+		adDetailsMaple.setEditable(false);
+		adDetailsMaple.setPrefRowCount(3);
+		adImageViewMaple.setFitHeight(100); adImageViewMaple.setFitWidth(100);
+		linkMaple = new Hyperlink("Adopt a cat!");
+		linkMaple.setOnAction(e -> getHostServices().showDocument("https://www.pawschicago.org/"));
+
 	}
 
 	private void weatherInfo() {
@@ -310,6 +339,10 @@ public class JavaFX extends Application {
 		weekContent = new HBox(10, weekBox, advertisementBoxMichelle);
 		weekHeaderAndInfoBox = new VBox(10, weekContent);
 
+		threeDaysInfoSec.getStyleClass().add("weatherInformationBox");
+		day3Content = new HBox(10, threeDaysInfoSec, advertisementBoxMaple);
+		day3HeaderAndInfoBox = new VBox(10, day3Content);
+
 		BorderPane mainLayout = new BorderPane();
 		mainLayout.getStyleClass().add("mainLayout");
 		mainLayout.setTop(navigationBarBox);
@@ -320,6 +353,7 @@ public class JavaFX extends Application {
 		primaryStage.setScene(mainScene);
 
 		buttonHome.setOnAction(e -> mainLayout.setCenter(headerAndInfoBox));
+		day3Button.setOnAction(e -> {mainLayout.setCenter(day3HeaderAndInfoBox);});
 		buttonWeek.setOnAction(e -> mainLayout.setCenter(weekHeaderAndInfoBox));
 
 		buttonSearch.setOnAction(e -> {
@@ -445,5 +479,51 @@ public class JavaFX extends Application {
 //
 //		weekDay7.setText(forecast.get(12).name);
 //		weekDay7DayTemp.setText(forecast.get(12).temperature + "°F");
+	}
+
+	private void day3Code() {
+		LocalDate today = LocalDate.now();
+		day1Date = new Label(today.toString());
+		day1Temp = new Label();
+		day1DayTemp = new Label();
+		day1NightTemp = new Label();
+		day1Precip = new TextField();
+		day1Wind = new Label();
+		day1Humidity = new TextField();
+
+		LocalDate tomorrow = today.plusDays(1);
+		day2Date = new Label(tomorrow.toString());
+		day2Temp = new Label();
+		day2DayTemp = new Label();
+		day2NightTemp = new Label();
+		day2Precip = new TextField();
+		day2Wind = new Label();
+		day2Humidity = new TextField();
+
+		LocalDate overmorrow = today.plusDays(2);
+		day3Date = new Label(overmorrow.toString());
+		day3Temp = new Label();
+		day3DayTemp = new Label();
+		day3NightTemp = new Label();
+		day3Precip = new TextField();
+		day3Wind = new Label();
+		day3Humidity = new TextField();
+
+		day1Temps = new HBox(10, day1DayTemp, day1NightTemp);
+		day1Temps.setAlignment(Pos.CENTER);
+		day1Info = new VBox(10, day1Date, day1Temp, day1Temps, day1Wind, day1Precip, day1Humidity);
+		day1Info.getStyleClass().add("day");
+
+		day2Temps = new HBox(10, day2DayTemp, day2NightTemp);
+		day2Temps.setAlignment(Pos.CENTER);
+		day2Info = new VBox(10, day2Date, day2Temp, day2Temps, day2Wind, day2Precip, day2Humidity);
+		day2Info.getStyleClass().add("day");
+
+		day3Temps = new HBox(10 ,day3DayTemp, day3NightTemp);
+		day3Temps.setAlignment(Pos.CENTER);
+		day3Info = new VBox(10, day3Date, day3Temp, day3Temps, day3Wind, day3Precip, day3Humidity);
+		day3Info.getStyleClass().add("day");
+
+		threeDaysInfoSec = new HBox(10, day1Info, day2Info, day3Info);
 	}
 }
