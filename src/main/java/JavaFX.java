@@ -68,7 +68,7 @@ public class JavaFX extends Application {
 		ads();
 		weatherInfo();
 		weekCode();
-		day3Code();
+		day3Code("LOT", 77, 70);
 		setupLayouts(primaryStage);
 
 		loadWeather("LOT", 77, 70); // Default to Chicago
@@ -452,6 +452,7 @@ public class JavaFX extends Application {
 		day1Wind.setText("Wind: " + forecast.get(0).windDirection + " " + forecast.get(0).windSpeed);
 		day1Precip.setText(forecast.get(0).shortForecast);
 
+
 		day2Temp.setText(forecast.get(2).name);
 		day2DayTemp.setText(forecast.get(2).temperature + "°F");
 		day2NightTemp.setText(forecast.get(3).temperature + "°F");
@@ -467,30 +468,38 @@ public class JavaFX extends Application {
 		weekDay1.setText(sdf.format(day1.startTime));
 		weekDay1DayTemp.setText(day1.temperature + "°F");
 		weekDay1Wind.setText(day1.windSpeed);
+		weekDay1NightTemp.setText(forecast.get(1).temperature + "°F");
+
 
 		weekDay2.setText(sdf.format(day2.startTime));
 		weekDay2DayTemp.setText(day2.temperature + "°F");
 		weekDay2Wind.setText(day2.windSpeed);
+		weekDay2NightTemp.setText(forecast.get(2).temperature + "°F");
 
 		weekDay3.setText(sdf.format(day3.startTime));
 		weekDay3DayTemp.setText(day3.temperature + "°F");
 		weekDay3Wind.setText(day3.windSpeed);
+		weekDay3NightTemp.setText(forecast.get(3).temperature + "°F");
 
 		weekDay4.setText(sdf.format(day4.startTime));
 		weekDay4DayTemp.setText(day4.temperature + "°F");
 		weekDay4Wind.setText(day4.windSpeed);
+		weekDay4NightTemp.setText(forecast.get(4).temperature + "°F");
 
 		weekDay5.setText(sdf.format(day5.startTime));
 		weekDay5DayTemp.setText(day5.temperature + "°F");
 		weekDay5Wind.setText(day5.windSpeed);
+		weekDay5NightTemp.setText(forecast.get(5).temperature + "°F");
 
 		weekDay6.setText(sdf.format(day6.startTime));
 		weekDay6DayTemp.setText(day6.temperature + "°F");
 		weekDay6Wind.setText(day6.windSpeed);
+		weekDay6NightTemp.setText(forecast.get(6).temperature + "°F");
 
 		weekDay7.setText(sdf.format(day7.startTime));
 		weekDay7DayTemp.setText(day7.temperature + "°F");
 		weekDay7Wind.setText(day7.windSpeed);
+		weekDay7NightTemp.setText(forecast.get(6).temperature + "°F");
 
 //		weekDay2.setText(forecast.get(2).name);
 //		weekDay2DayTemp.setText(forecast.get(2).temperature + "°F");
@@ -511,9 +520,19 @@ public class JavaFX extends Application {
 //		weekDay7DayTemp.setText(forecast.get(12).temperature + "°F");
 	}
 
-	private void day3Code() {
-		LocalDate today = LocalDate.now();
-		day1Date = new Label(today.toString());
+	private void day3Code(String office, int gridX, int gridY) {
+		ArrayList<Period> forecast = WeatherAPI.getForecast(office, gridX, gridY);
+		if (forecast == null) return;
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		Period day1 = forecast.get(0);
+		Period day2 = forecast.get(1);
+		Period day3 = forecast.get(2);
+
+		day1Date = new Label();
+		day1Date.setText(sdf.format(day1.startTime));
+//		day1Date.setText(day3.startTime.format(sdf));
+//		LocalDate today = LocalDate.now();
+//		day1Date = new Label(today.toString());
 		day1Temp = new Label();
 		day1DayTemp = new Label();
 		day1NightTemp = new Label();
@@ -521,8 +540,11 @@ public class JavaFX extends Application {
 		day1Wind = new Label();
 //		day1Humidity = new TextField();
 
-		LocalDate tomorrow = today.plusDays(1);
-		day2Date = new Label(tomorrow.toString());
+//		LocalDate tomorrow = today.plusDays(1);
+//		day2Date = new Label(tomorrow.toString());
+//		day2Date.setText(day3.startTime.format(sdf));
+		day2Date = new Label();
+		day2Date.setText(sdf.format(day2.startTime));
 		day2Temp = new Label();
 		day2DayTemp = new Label();
 		day2NightTemp = new Label();
@@ -530,8 +552,12 @@ public class JavaFX extends Application {
 		day2Wind = new Label();
 //		day2Humidity = new TextField();
 
-		LocalDate overmorrow = today.plusDays(2);
-		day3Date = new Label(overmorrow.toString());
+//		LocalDate overmorrow = today.plusDays(2);
+//		day3Date = new Label(overmorrow.toString());
+//		day3Date.setText(sdf.format(day3.startTime));
+//		day3Date.setText(day3.startTime.format(sdf));
+		day3Date = new Label();
+		day3Date.setText(sdf.format(day3.startTime));
 		day3Temp = new Label();
 		day3DayTemp = new Label();
 		day3NightTemp = new Label();
