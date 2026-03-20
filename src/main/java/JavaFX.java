@@ -16,6 +16,32 @@ import java.time.LocalDate;
 // use https://api.weather.gov/gridpoints/LOT/77,70/forecast to see where data is
 // idk how to do humidity, lets just scratch it.
 
+//adding adaptor class
+class Adaptor {
+	private Period period;
+
+	public Adaptor(Period p) {
+		this.period = p;
+	}
+
+	public String getDate(SimpleDateFormat sdf) {
+		return sdf.format(period.startTime);
+	}
+}
+//proxy
+class Proxy {
+	private ArrayList<Period> cache = null;
+
+	public ArrayList<Period> getForecast(String office, int x, int y) {
+		if (cache != null) {
+			return cache;
+		}
+		cache = WeatherAPI.getForecast(office, x, y);
+		return cache;
+	}
+}
+
+
 public class JavaFX extends Application {
 
 	Label day3Date, day3Temp, day3DayTemp, day3NightTemp, day3Wind;
@@ -393,6 +419,8 @@ public class JavaFX extends Application {
 	}
 
 	private void loadWeather(String office, int gridX, int gridY) {
+//		Proxy proxy1 = new Proxy();
+//		ArrayList<Period> forecast = proxy1.getForecast("LOT", 77, 70);
 		ArrayList<Period> forecast = WeatherAPI.getForecast(office, gridX, gridY);
 		if (forecast == null) return;
 
@@ -465,6 +493,8 @@ public class JavaFX extends Application {
 		day3Wind.setText("Wind: " + forecast.get(4).windDirection + " " + forecast.get(4).windSpeed);
 		day3Precip.setText(forecast.get(4).shortForecast);
 
+		Adaptor daya = new Adaptor(forecast.get(0));
+		weekDay1.setText(daya.getDate(sdf));
 		weekDay1.setText(sdf.format(day1.startTime));
 		weekDay1DayTemp.setText(day1.temperature + "°F");
 		weekDay1Wind.setText(day1.windSpeed);
@@ -521,7 +551,9 @@ public class JavaFX extends Application {
 	}
 
 	private void day3Code(String office, int gridX, int gridY) {
-		ArrayList<Period> forecast = WeatherAPI.getForecast(office, gridX, gridY);
+		Proxy proxy1 = new Proxy();
+		ArrayList<Period> forecast = proxy1.getForecast("LOT", 77, 70);
+//		ArrayList<Period> forecast = WeatherAPI.getForecast(office, gridX, gridY);
 		if (forecast == null) return;
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		Period day1 = forecast.get(0);
